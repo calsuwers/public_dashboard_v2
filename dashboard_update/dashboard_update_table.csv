@@ -1,0 +1,2 @@
+date,title,message
+10/16/2024,New R Shiny Dashboard Launched,"We are excited to announce the launch of the new CDPH Wastewater Surveillance Dashboard, developed using R Shiny. Currently, the dashboard provides data for SARS-CoV-2 (COVID-19). You can explore viral concentrations, trends, and levels in various regions and sewersheds through this dashboard."
