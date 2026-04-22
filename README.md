@@ -26,7 +26,7 @@ The dashboard supports the following pathogens:
 > For all pathogens, per-sewershed **level** metrics (e.g., Very Low, Low, Moderate, High)
 > are **not yet based on real data** at the sewershed level. The wastewater viral activity
 > level (WVAL) methodology has not yet been finalized for individual sewersheds, so the
-> current dataset (`saveReportMetrics_modified.csv`) uses placeholder values — all
+> current dataset (`saveReportMetrics.csv`) uses placeholder values — all
 > sewershed threshold columns (q1–q4) are set to 1 and level is set to "Very Low" — to
 > avoid displaying misleading metrics.
 >
@@ -57,8 +57,8 @@ The dashboard supports the following pathogens:
 │   ├── saveRegionalAggregatesRPHO/
 │   │   └── saveRegionalAggregates_wval_rpho.csv   # Regional-level aggregate metrics
 │   └── saveReportMetricsRPHO/
-│       └── saveReportMetrics.csv          # Modified version with placeholder level values for sewershed_level
-│                                          # (see sewershed-level metrics note above)
+│       └── saveReportMetrics.csv                   # Sewershed-level report metrics
+│                                                   # (placeholder level values — see note above)
 │
 ├── shape_file/
 │   ├── CA_all_sewersheds.*            # Sewershed polygon boundaries
@@ -124,17 +124,33 @@ This will download and install all necessary packages into a project-specific li
 
 ### 3. Update File Paths
 
-After cloning this repo, update file paths in `global.R` so that they point to the `Data/` folder inside your project.
+After cloning this repo, there are **7 file paths** in `global.R` that need to be updated to match the location where you cloned the project on your machine. All paths use the placeholder `/update_your_path/` which must be replaced with your actual local path.
 
-   Example:
+Replace `/update_your_path` with the path to your cloned `dashboard_v2` folder. For example, if you cloned the repo to `/Users/yourname/Documents/`, your path would start with `/Users/yourname/Documents`.
 
-   ```r
-   # Before:
-   read_csv("/path/to/your/dashboard/data_folder/data.csv")
+The 7 paths to update are:
 
-   # After:
-   read_csv("/your specific path/dashboard/data_folder/data.csv")
-   ```
+| Object created | File |
+|---------------|------|
+| `dash_update_data` | `dashboard_update/dashboard_update_table.csv` |
+| `td2_path` → `td2` | `data/td2_with_wval.RDS` |
+| `region_path` → `d1`, `f1` | `data/saveRegionalAggregatesRPHO/` (folder) |
+| `report_metrics_path` → `d2`, `f2` | `data/saveReportMetricsRPHO/` (folder) |
+| `shape_df` | `shape_file/CA_all_sewersheds.shp` |
+| `ca_regions` | `shape_file/saveCA_RPHORegions.shp` |
+| `ca_counties` | `shape_file/saveCA_RPHOCounties.shp` |
+
+Example — if your project is located at `/Users/yourname/Documents/dashboard_v2`:
+
+```r
+# Before (placeholder):
+td2_path <- "/update_your_path/dashboard_v2/data/td2_with_wval.RDS"
+
+# After (your actual path):
+td2_path <- "/Users/yourname/Documents/dashboard_v2/data/td2_with_wval.RDS"
+```
+
+Apply the same substitution to all 7 paths listed above.
 
 ### 4. Run the app
 
