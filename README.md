@@ -40,16 +40,40 @@ The dashboard supports the following pathogens:
 ## File structure
 
 ```
-├── Data/             # Contains all input CSV, RDS, and shapefile data
+├── app.R                              # Minimal entry point (calls shinyApp(ui, server))
+├── global.R                           # Loads packages and data, defines global objects
+├── server.R                           # Server logic (reactives, plots, maps, tables)
+├── ui.R                               # User interface layout (dashboardPage)
+├── slim_td2.R                         # One-off utility: slims td2_with_wval.RDS to required columns
+├── dashboard_v2.Rproj                 # RStudio project file
+├── renv.lock                          # Pinned package versions for renv
+├── README.md                          # This file
+│
 ├── R/
-│   └── functions.R   # Custom helper functions (sourced by global.R)
-├── www/              # Static files (CSS, icons, images)
-├── app.R             # Minimal entry point (calls shinyApp(ui, server))
-├── global.R          # Loads packages and data, defines global objects
-├── server.R          # Server logic (reactives, plots, maps, tables)
-├── ui.R              # User interface layout (dashboardPage)
-├── renv.lock         # Pinned package versions for renv
-├── README.md         # This file
+│   └── functions.R                    # Custom helper functions (sourced by global.R)
+│
+├── data/
+│   ├── td2_with_wval.RDS              # Site-level raw wastewater time series (all pathogens)
+│   ├── saveRegionalAggregatesRPHO/
+│   │   └── saveRegionalAggregates_wval_rpho.csv   # Regional-level aggregate metrics
+│   └── saveReportMetricsRPHO/
+│       └── saveReportMetrics.csv          # Modified version with placeholder level values for sewershed_level
+│                                          # (see sewershed-level metrics note above)
+│
+├── shape_file/
+│   ├── CA_all_sewersheds.*            # Sewershed polygon boundaries
+│   ├── saveCA_RPHOCounties.*          # County boundaries
+│   └── saveCA_RPHORegions.*           # RPHO region boundaries
+│
+├── dashboard_update/
+│   └── dashboard_update_table.csv     # Dashboard update log
+│
+├── www/
+│   ├── analytics.js                   # Web analytics script
+│   ├── cdph_logo_2024e.png            # CDPH logo
+│   └── favicon.png                    # Browser tab icon
+│
+└── renv/                              # renv environment (do not commit renv/library/)
 ```
 
 Each R file starts with a commented section outline. Section headers use
