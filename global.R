@@ -199,12 +199,12 @@ low_base_value = 50
 # =============================================================================
 
 dash_update_data <-
-  read.csv("/Users/chiyuenwong/Downloads/files/dashboard_v2/dashboard_update/dashboard_update_table.csv") %>%
+  read.csv("/update_your_path/dashboard_v2/dashboard_update/dashboard_update_table.csv") %>%
   arrange(desc(date))
 
-td2_path <- "/Users/chiyuenwong/Downloads/files/dashboard_v2/data/td2_with_wval.RDS"
-region_path <- "/Users/chiyuenwong/Downloads/files/dashboard_v2/data/saveRegionalAggregatesRPHO/"
-report_metrics_path <- "/Users/chiyuenwong/Downloads/files/dashboard_v2/data/saveReportMetricsRPHO/"
+td2_path <- "/update_your_path/dashboard_v2/data/td2_with_wval.RDS"
+region_path <- "/update_your_path/dashboard_v2/data/saveRegionalAggregatesRPHO/"
+report_metrics_path <- "/update_your_path/dashboard_v2/data/saveReportMetricsRPHO/"
 
 # =============================================================================
 # 6. DATA LOADING ----
@@ -235,7 +235,7 @@ td2 = readRDS(strwrap(td2_path)) %>%
 sf_use_s2(F)
 
 shape_df <-
-  st_read("/Users/chiyuenwong/Downloads/files/dashboard_v2/shape_file/CA_all_sewersheds.shp") %>% 
+  st_read("/update_your_path/dashboard_v2/shape_file/CA_all_sewersheds.shp") %>% 
   st_transform(crs = 4326) %>%
   st_zm() %>%
   sf::st_make_valid() %>%
@@ -245,7 +245,7 @@ shape_df <-
   mutate(lng = st_coordinates(center)[,1],
          lat = st_coordinates(center)[,2])
 
-ca_regions <- st_read("/Users/chiyuenwong/Downloads/files/dashboard_v2/shape_file/saveCA_RPHORegions.shp")  %>% 
+ca_regions <- st_read("/update_your_path/dashboard_v2/shape_file/saveCA_RPHORegions.shp")  %>% 
   recode_rpho_region(.new_col = "region", .ref_col = "rph_rgn") %>% 
   select(-rph_rgn) %>% 
   mutate(center = st_centroid(geometry)) %>% 
@@ -255,7 +255,7 @@ ca_regions <- st_read("/Users/chiyuenwong/Downloads/files/dashboard_v2/shape_fil
   st_transform(crs = 4326) %>%
   st_zm() 
 
-ca_counties <- st_read("/Users/chiyuenwong/Downloads/files/dashboard_v2/shape_file/saveCA_RPHOCounties.shp")   %>% 
+ca_counties <- st_read("/update_your_path/dashboard_v2/shape_file/saveCA_RPHOCounties.shp")   %>% 
   recode_rpho_region(.new_col = "region", .ref_col = "rph_rgn") %>% 
   select(-rph_rgn) %>% 
   st_transform(crs = 4326) %>%
