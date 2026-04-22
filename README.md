@@ -23,7 +23,17 @@ The dashboard supports the following pathogens:
 - **Respiratory Syncytial Virus (RSV)**
 
 > **⚠️ Note regarding sewershed-level metrics**
-> For Flu A, Flu B, and RSV, per-sewershed **level** metrics are not yet displayed on the Sewershed tab. Statewide and regional level summaries are fully populated, and sewershed-level time-series plots are shown, but the categorical level box for individual sewersheds is intentionally left blank pending finalization of the WVAL-based trend metric at the sewershed level. The Sewershed tab will be updated to include level metrics once that work is complete.
+> For all pathogens, per-sewershed **level** metrics (e.g., Very Low, Low, Moderate, High)
+> are **not yet based on real data** at the sewershed level. The wastewater viral activity
+> level (WVAL) methodology has not yet been finalized for individual sewersheds, so the
+> current dataset (`saveReportMetrics_modified.csv`) uses placeholder values — all
+> sewershed threshold columns (q1–q4) are set to 1 and level is set to "Very Low" — to
+> avoid displaying misleading metrics.
+>
+> **Trend metrics, however, are fully available for each sewershed** and accurately reflect
+> the 21-day directional trend in wastewater concentrations. Users can rely on the trend
+> information displayed on the Sewershed tab. Level metrics will be updated once the
+> WVAL-based approach is finalized and validated at the sewershed level.
 
 ---
 
