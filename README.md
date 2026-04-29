@@ -29,7 +29,7 @@ The dashboard supports the following pathogens:
 > For all pathogens, per-sewershed **level** metrics (e.g., Very Low, Low, Moderate, High)
 > are **not yet based on real data** at the sewershed level. The wastewater viral activity
 > level (WVAL) methodology has not yet been finalized for individual sewersheds, so the
-> current dataset (`saveReportMetrics_modified.csv`) uses placeholder values — all
+> current dataset (`saveReportMetrics.csv`) uses placeholder values — all
 > sewershed threshold columns (q1–q4) are set to 1 and level is set to "Very Low" — to
 > avoid displaying misleading metrics.
 >
@@ -60,8 +60,8 @@ The dashboard supports the following pathogens:
 │   ├── saveRegionalAggregatesRPHO/
 │   │   └── saveRegionalAggregates_wval_rpho.csv   # Regional-level aggregate metrics
 │   └── saveReportMetricsRPHO/
-│       └── saveReportMetrics.csv          # Modified version with placeholder level values for sewershed_level
-│                                          # (see sewershed-level metrics note above)
+│       └── saveReportMetrics.csv                   # Sewershed-level report metrics
+│                                                   # (placeholder level values — see note above)
 │
 ├── shape_file/
 │   ├── CA_all_sewersheds_centroids.csv  # Sewershed approximate icon locations (lat/lng centroids only; polygon boundaries not shared)
