@@ -199,12 +199,12 @@ low_base_value = 50
 # =============================================================================
 
 dash_update_data <-
-  read.csv("/Users/chiyuenwong/Downloads/files/dashboard_v2/dashboard_update/dashboard_update_table.csv") %>%
+  read.csv("dashboard_update/dashboard_update_table.csv") %>%
   arrange(desc(date))
 
-td2_path <- "/Users/chiyuenwong/Downloads/files/dashboard_v2/data/td2_with_wval.RDS"
-region_path <- "/Users/chiyuenwong/Downloads/files/dashboard_v2/data/saveRegionalAggregatesRPHO/"
-report_metrics_path <- "/Users/chiyuenwong/Downloads/files/dashboard_v2/data/saveReportMetricsRPHO/"
+td2_path <- "/path/to/your/data/td2_with_wval.RDS"
+region_path <- "/path/to/your/data/saveRegionalAggregatesRPHO/"
+report_metrics_path <- "/path/to/your/data/saveReportMetricsRPHO/"
 
 # =============================================================================
 # 6. DATA LOADING ----
@@ -234,18 +234,9 @@ td2 = readRDS(strwrap(td2_path)) %>%
 
 sf_use_s2(F)
 
-shape_df <-
-  st_read("/Users/chiyuenwong/Downloads/files/dashboard_v2/shape_file/CA_all_sewersheds.shp") %>% 
-  st_transform(crs = 4326) %>%
-  st_zm() %>%
-  sf::st_make_valid() %>%
-  sf::st_collection_extract("POLYGON") %>%            # <-- add this
-  dplyr::filter(!sf::st_is_empty(geometry)) %>%
-  dplyr::mutate(center = sf::st_centroid(geometry)) %>% 
-  mutate(lng = st_coordinates(center)[,1],
-         lat = st_coordinates(center)[,2])
+shape_df <- read.csv("shape_file/CA_all_sewersheds_centroids.csv")
 
-ca_regions <- st_read("/Users/chiyuenwong/Downloads/files/dashboard_v2/shape_file/saveCA_RPHORegions.shp")  %>% 
+ca_regions <- st_read("shape_file/saveCA_RPHORegions.shp")  %>%
   recode_rpho_region(.new_col = "region", .ref_col = "rph_rgn") %>% 
   select(-rph_rgn) %>% 
   mutate(center = st_centroid(geometry)) %>% 
@@ -255,7 +246,7 @@ ca_regions <- st_read("/Users/chiyuenwong/Downloads/files/dashboard_v2/shape_fil
   st_transform(crs = 4326) %>%
   st_zm() 
 
-ca_counties <- st_read("/Users/chiyuenwong/Downloads/files/dashboard_v2/shape_file/saveCA_RPHOCounties.shp")   %>% 
+ca_counties <- st_read("shape_file/saveCA_RPHOCounties.shp")  %>%
   recode_rpho_region(.new_col = "region", .ref_col = "rph_rgn") %>% 
   select(-rph_rgn) %>% 
   st_transform(crs = 4326) %>%
@@ -458,13 +449,8 @@ spal <- setNames(
   names(sewershed_threshold_colors)
 )
 
-c3 = c2 %>% filter(!is.na(wwtp_name)) %>% left_join(shape_df, by = c("wwtp_name" = "sewershed")) %>%
-  bind_rows(
-    d2 %>% filter(is.na(wwtp_name)) %>%
-      left_join(ca_counties %>%
-                  select(region, geometry, lng, lat), by = c("region"))
-  ) %>%
-  st_as_sf() %>%
+c3 = c2 %>% filter(!is.na(wwtp_name)) %>%
+  left_join(shape_df, by = c("wwtp_name" = "sewershed")) %>%
   mutate_at(c("model_pc", "model_pc_lwr", "model_pc_upr"), ~round(., digits = 0)) %>%
   mutate(wwtp_name = Label_Name)
 

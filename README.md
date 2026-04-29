@@ -1,8 +1,11 @@
 # California Wastewater Surveillance Dashboard (v2)
 
-This repository contains the source code for the [official California Wastewater Surveillance Dashboard](https://skylab.cdph.ca.gov/calwws/) developed by the California Department of Public Health (CDPH).
+This repository contains the source code to reproduce the [official California Wastewater Surveillance Dashboard](https://skylab.cdph.ca.gov/calwws/) developed by the California Department of Public Health (CDPH).
 
 This dashboard is built using **R Shiny**, **Leaflet**, and **Plotly**, offering interactive views of wastewater data at statewide, regional, and individual sewershed levels.
+
+> **ℹ️ Note regarding sewershed map**
+> Individual sewershed boundary shapes are not included in this public repository. The sewershed map in this codebase displays only the **approximate location** of each sewershed as an icon. For the full sewershed boundary map, visit the [official dashboard](https://skylab.cdph.ca.gov/calwws/).
 
 > **ℹ️ Note regarding Versioning**
 > This is the **updated version (v2)** of the dashboard. The previous release is archived at [calsuwers/public_dashboard_v1](https://github.com/calsuwers/public_dashboard_v1). The main change in v2 is broader pathogen coverage — **Influenza A (including H5), Influenza B, and RSV** are now included alongside SARS-CoV-2, each with its own homepage summary box, maps, and time-series plots.
@@ -52,7 +55,7 @@ The dashboard supports the following pathogens:
 ├── R/
 │   └── functions.R                    # Custom helper functions (sourced by global.R)
 │
-├── data/
+├── data/                              # NOT included in this repo — provide your own copies (see Step 3 below)
 │   ├── td2_with_wval.RDS              # Site-level raw wastewater time series (all pathogens)
 │   ├── saveRegionalAggregatesRPHO/
 │   │   └── saveRegionalAggregates_wval_rpho.csv   # Regional-level aggregate metrics
@@ -61,9 +64,9 @@ The dashboard supports the following pathogens:
 │                                          # (see sewershed-level metrics note above)
 │
 ├── shape_file/
-│   ├── CA_all_sewersheds.*            # Sewershed polygon boundaries
-│   ├── saveCA_RPHOCounties.*          # County boundaries
-│   └── saveCA_RPHORegions.*           # RPHO region boundaries
+│   ├── CA_all_sewersheds_centroids.csv  # Sewershed approximate icon locations (lat/lng centroids only; polygon boundaries not shared)
+│   ├── saveCA_RPHOCounties.*            # County boundaries
+│   └── saveCA_RPHORegions.*             # RPHO region boundaries
 │
 ├── dashboard_update/
 │   └── dashboard_update_table.csv     # Dashboard update log
@@ -124,17 +127,15 @@ This will download and install all necessary packages into a project-specific li
 
 ### 3. Update File Paths
 
-After cloning this repo, update file paths in `global.R` so that they point to the `Data/` folder inside your project.
+Most file paths in `global.R` use relative paths and will work automatically after cloning. The only paths you need to update are the three data file paths near the top of `global.R`:
 
-   Example:
+```r
+td2_path           <- "/path/to/your/data/td2_with_wval.RDS"
+region_path        <- "/path/to/your/data/saveRegionalAggregatesRPHO/"
+report_metrics_path <- "/path/to/your/data/saveReportMetricsRPHO/"
+```
 
-   ```r
-   # Before:
-   read_csv("/path/to/your/dashboard/data_folder/data.csv")
-
-   # After:
-   read_csv("/your specific path/dashboard/data_folder/data.csv")
-   ```
+Replace `/path/to/your/data/` with the actual folder on your machine where you have stored the data files.
 
 ### 4. Run the app
 
@@ -146,8 +147,8 @@ Once the environment is set up, packages are downloaded, and file paths are upda
 
 ### :pushpin: Notes
 
-- The shapefile used in this dashboard includes **sewershed polygons** for the Sewershed heatmap view, in addition to regional and county boundary layers.
-- `renv.lock` only pins R package versions, not the system C++ libraries that `sf` wraps (GEOS, GDAL, PROJ). If `st_centroid()` or Leaflet rendering raises errors on the sewershed polygons, guard the pipeline with `sf::st_make_valid()` and `sf::st_collection_extract("POLYGON")` before computing centroids. Check system-library versions with `sf::sf_extSoftVersion()`.
+- The `shape_file/` folder includes regional and county boundary shapefiles used for the Region map polygons. Sewershed polygon boundaries are **not included** — the Sewershed map instead uses `CA_all_sewersheds_centroids.csv` to place an approximate icon for each sewershed.
+- `renv.lock` only pins R package versions, not the system C++ libraries that `sf` wraps (GEOS, GDAL, PROJ). Check system-library versions with `sf::sf_extSoftVersion()`.
 - The app aims for ADA Section 508 compliance: `tags$html(lang="en")` at the page root, keyboard handlers (`onkeydown`) on clickable non-button elements, `tabindex="0"` on info boxes and legend entries, and a JavaScript post-processor injected into every Plotly chart via `htmlwidgets::onRender()` so that range-selector buttons and legend items are focusable and keyboard-activatable.
 
 ## Contact

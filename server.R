@@ -680,10 +680,24 @@ server <- function(input, output, session) {
         ),
         flu_toggle_message(),
         tags$div(
-          style = "margin-top: 20px;", 
+          style = "margin-top: 20px;",
           tags$span(
             style = "background-color: #fff3cd; color: #856404; padding: 10px; display: block; border-left: 6px solid #ffeeba; font-weight: bold; font-size: 24px;",
             "Note: Sewershed-level metrics are currently under development and will be available on the dashboard soon."
+          )
+        ),
+        tags$div(
+          style = "margin-top: 10px;",
+          tags$span(
+            style = "background-color: #e8f4f8; color: #1a5276; padding: 10px; display: block; border-left: 6px solid #aed6f1; font-size: 20px;",
+            "Note: Individual sewershed boundary shapes are not included in the public code repository. The map below shows only the approximate location of each sewershed (represented by an icon). For the full sewershed boundary map, please visit the ",
+            tags$a(
+              href = "https://skylab.cdph.ca.gov/calwws/",
+              "official CDPH California Wastewater Surveillance Dashboard",
+              target = "_blank",
+              style = "color: #1a5276;"
+            ),
+            "."
           )
         ),
         br(),
@@ -728,9 +742,9 @@ server <- function(input, output, session) {
   # ===========================================================================
   wwtp_factor = reactive({
     as.data.frame(c33()) %>%
-      select(wwtp_name, Shape_Area) %>%
-      distinct() %>%
-      arrange(-Shape_Area) %>% pull(wwtp_name)
+      distinct(wwtp_name) %>%
+      arrange(wwtp_name) %>%
+      pull(wwtp_name)
   })
   
   output$dynamic_title <- renderUI({
@@ -1203,43 +1217,15 @@ server <- function(input, output, session) {
   output$heatmap_sewershed <-
     
     renderLeaflet({
-      req(smapdf(), sz(), spal_value(),  s_sewershed_label(), siconList())
-    
-      df <- smapdf() 
+      req(smapdf(), sz(), s_sewershed_label(), siconList())
+
+      df <- smapdf()
       sz <- sz()
-      
-      marker_label <- sprintf(
-        "<strong>%s</strong>",
-        df$wwtp_name
-      ) %>%
-        lapply(htmltools::HTML)
-      
-      leaflet(df) %>%
+
+      leaflet() %>%
         setView(lng = sz$lng, lat = sz$lat, zoom = sz$zoom) %>%
         addTiles() %>%
         addProviderTiles(providers$CartoDB.Positron) %>%
-        addPolygons(
-          fillColor = spal_value(),
-          weight = 1,
-          opacity = 1,
-          color = "#666",
-          dashArray = "1",
-          fillOpacity = 0.7,
-          highlightOptions = highlightOptions(
-            weight = 2,
-            color = "#666",
-            dashArray = "",
-            fillOpacity = 0.7,
-            bringToFront = TRUE
-          ),
-          label = s_sewershed_label(),
-          layerId = df$wwtp_name,
-          labelOptions = labelOptions(
-            style = list("font-weight" = "normal", padding = "3px 8px"),
-            textsize = "15px",
-            direction = "auto"
-          )
-        ) %>%
         addEasyButton(easyButton(
           icon = "fa-refresh",
           title = "Reset View",
@@ -1249,6 +1235,7 @@ server <- function(input, output, session) {
            }"))
         )) %>%
         addAwesomeMarkers(
+          data = df,
           lat = ~lat,
           lng = ~lng,
           icon = siconList(),
