@@ -112,7 +112,7 @@ This Shiny app uses `renv` to manage package dependencies. The `renv.lock` file 
 ```R
 setwd("/path to folder where app.R is located/") # Change the working directory in R console to the folder where app.R is located
 install.packages("renv")            # Only needed if you haven't installed renv yet
-renv::restore()                     # Installs all packages at the versions listed in renv.lock
+renv::restore()                     # Initializes renv and install packages and select option 1 - Restore the project from the lockfile.
 ```
 
 This will download and install all necessary packages into a project-specific library. You only need to run this once, unless the `renv.lock` file changes.
