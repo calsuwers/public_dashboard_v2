@@ -97,7 +97,7 @@ git --version
 In the terminal, navigate to the directory where you'd like to clone this repository and then run the following command.
 
 ```bash
-git clone https://github.com/calsuwers/public_dashboard_v2.git
+git clone https://github.com/calsuwers/public_dashboard_v2
 ```
 
 ### 2. Install Required R Packages
