@@ -12,7 +12,7 @@ This dashboard is built using **R Shiny**, **Leaflet**, and **Plotly**, offering
 
 ## Environment & Compatibility
 
-The `renv.lock` file was generated using **R version 4.5.2**. While the project is expected to support newer versions of R, we recommend using version 4.5.2 if you encounter any compatibility issues during `renv::restore()`.
+The `renv.lock` file was generated using **R version 4.5.2**. While the project is expected to support newer versions of R, we recommend using version 4.5.2 if you encounter any compatibility issues installing packages.
 
 ---
 
@@ -71,12 +71,10 @@ The dashboard supports the following pathogens:
 ├── dashboard_update/
 │   └── dashboard_update_table.csv     # Dashboard update log
 │
-├── www/
-│   ├── analytics.js                   # Web analytics script
-│   ├── cdph_logo_2024e.png            # CDPH logo
-│   └── favicon.png                    # Browser tab icon
-│
-└── renv/                              # renv environment (do not commit renv/library/)
+└── www/
+    ├── analytics.js                   # Web analytics script
+    ├── cdph_logo_2024e.png            # CDPH logo
+    └── favicon.png                    # Browser tab icon
 ```
 
 Each R file starts with a commented section outline. Section headers use
@@ -99,12 +97,12 @@ git --version
 In the terminal, navigate to the directory where you'd like to clone this repository and then run the following command.
 
 ```bash
-git clone https://github.com/calsuwers/public_dashboard_v2.git
+git clone https://github.com/calsuwers/public_dashboard_v2
 ```
 
 ### 2. Install Required R Packages
 
-This Shiny app uses `renv` to manage package dependencies. This ensures that the exact versions of R packages used in development are also used when you run the app — no version mismatches, no missing packages.
+This Shiny app uses `renv` to manage package dependencies. The `renv.lock` file pins the exact package versions used in development — you do not need the `renv/` folder itself.
 
 ✔️ One-time setup:
 
@@ -114,16 +112,14 @@ This Shiny app uses `renv` to manage package dependencies. This ensures that the
 ```R
 setwd("/path to folder where app.R is located/") # Change the working directory in R console to the folder where app.R is located
 install.packages("renv")            # Only needed if you haven't installed renv yet
-renv::init()                        # Initializes renv and install packages and select option 1 - Restore the project from the lockfile.
-source("renv/activate.R")           # Activates the renv environment
+renv::restore()                     # Initializes renv and install packages and select option 1 - Restore the project from the lockfile.
 ```
 
-This will download and install all necessary packages into a project-specific library managed by `renv`, and you only need to run `source("renv/activate.R")` once unless the `renv.lock` file changes or you delete the local renv library.
+This will download and install all necessary packages into a project-specific library. You only need to run this once, unless the `renv.lock` file changes.
 
-:lock: Notes:
+:lock: Note:
 
-- The `renv.lock` file is committed to this repo — it ensures reproducibility.
-- The `renv/library/` folder (where packages are installed) is local to your machine and should not be committed to Git. It's listed in `.gitignore`.
+- The `renv.lock` file is committed to this repo — it ensures reproducibility across machines.
 
 ### 3. Update File Paths
 
@@ -148,7 +144,7 @@ Once the environment is set up, packages are downloaded, and file paths are upda
 ### :pushpin: Notes
 
 - The `shape_file/` folder includes regional and county boundary shapefiles used for the Region map polygons. Sewershed polygon boundaries are **not included** — the Sewershed map instead uses `CA_all_sewersheds_centroids.csv` to place an approximate icon for each sewershed.
-- `renv.lock` only pins R package versions, not the system C++ libraries that `sf` wraps (GEOS, GDAL, PROJ). Check system-library versions with `sf::sf_extSoftVersion()`.
+- `renv.lock` pins R package versions only, not the system C++ libraries that `sf` wraps (GEOS, GDAL, PROJ). Check system-library versions with `sf::sf_extSoftVersion()`.
 - The app aims for ADA Section 508 compliance: `tags$html(lang="en")` at the page root, keyboard handlers (`onkeydown`) on clickable non-button elements, `tabindex="0"` on info boxes and legend entries, and a JavaScript post-processor injected into every Plotly chart via `htmlwidgets::onRender()` so that range-selector buttons and legend items are focusable and keyboard-activatable.
 
 ## Contact
