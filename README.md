@@ -10,12 +10,6 @@ This dashboard is built using **R Shiny**, **Leaflet**, and **Plotly**, offering
 > **ℹ️ Note regarding Versioning**
 > This is the **updated version (v2)** of the dashboard. The previous release is archived at [calsuwers/public_dashboard_v1](https://github.com/calsuwers/public_dashboard_v1). The main change in v2 is broader pathogen coverage — **Influenza A (including H5), Influenza B, and RSV** are now included alongside SARS-CoV-2, each with its own homepage summary box, maps, and time-series plots.
 
-## Environment & Compatibility
-
-The `renv.lock` file was generated using **R version 4.5.2**. While the project is expected to support newer versions of R, we recommend using version 4.5.2 if you encounter any compatibility issues installing packages.
-
----
-
 ## Pathogen Data Coverage
 
 The dashboard supports the following pathogens:
@@ -49,13 +43,14 @@ The dashboard supports the following pathogens:
 ├── ui.R                               # User interface layout (dashboardPage)
 ├── slim_td2.R                         # One-off utility: slims td2_with_wval.RDS to required columns
 ├── dashboard_v2.Rproj                 # RStudio project file
+├── .Rprofile                          # Automatically activates the renv environment upon opening
 ├── renv.lock                          # Pinned package versions for renv
 ├── README.md                          # This file
 │
 ├── R/
 │   └── functions.R                    # Custom helper functions (sourced by global.R)
 │
-├── data/                              # NOT included in this repo — provide your own copies (see Step 3 below)
+├── data/
 │   ├── td2_with_wval.RDS              # Site-level raw wastewater time series (all pathogens)
 │   ├── saveRegionalAggregatesRPHO/
 │   │   └── saveRegionalAggregates_wval_rpho.csv   # Regional-level aggregate metrics
@@ -64,17 +59,19 @@ The dashboard supports the following pathogens:
 │                                                   # (placeholder level values — see note above)
 │
 ├── shape_file/
-│   ├── CA_all_sewersheds_centroids.csv  # Sewershed approximate icon locations (lat/lng centroids only; polygon boundaries not shared)
-│   ├── saveCA_RPHOCounties.*            # County boundaries
-│   └── saveCA_RPHORegions.*             # RPHO region boundaries
+│   ├── CA_all_sewersheds.* # Sewershed polygon boundaries
+│   ├── saveCA_RPHOCounties.* # County boundaries
+│   └── saveCA_RPHORegions.* # RPHO region boundaries
 │
 ├── dashboard_update/
 │   └── dashboard_update_table.csv     # Dashboard update log
 │
-└── www/
-    ├── analytics.js                   # Web analytics script
-    ├── cdph_logo_2024e.png            # CDPH logo
-    └── favicon.png                    # Browser tab icon
+├── www/
+│   ├── analytics.js                   # Web analytics script
+│   ├── cdph_logo_2024e.png            # CDPH logo
+│   └── favicon.png                    # Browser tab icon
+│
+└── renv/                              # renv environment (do not commit renv/library/)
 ```
 
 Each R file starts with a commented section outline. Section headers use
@@ -92,15 +89,19 @@ To verify that Git is properly installed, open your terminal and type:
 git --version
 ```
 
-### 1. Clone the Repository
+### 1. Environment & Compatibility
 
-In the terminal, navigate to the directory where you'd like to clone this repository and then run the following command.
+The `renv.lock` file was generated using **R version 4.5.2**. While the project is expected to support newer versions of R, we recommend using version 4.5.2 if you encounter any compatibility issues installing packages.
+
+### 2. Clone the Repository
+
+In the terminal, navigate to the **directory where you'd like to clone this repository** and then run the following command.
 
 ```bash
 git clone https://github.com/calsuwers/public_dashboard_v2
 ```
 
-### 2. Install Required R Packages
+### 3. Install Required R Packages
 
 This Shiny app uses `renv` to manage package dependencies. The `renv.lock` file pins the exact package versions used in development — you do not need the `renv/` folder itself.
 
@@ -121,19 +122,17 @@ This will download and install all necessary packages into a project-specific li
 
 - The `renv.lock` file is committed to this repo — it ensures reproducibility across machines.
 
-### 3. Update File Paths
+### 4. Update File Paths
 
-Most file paths in `global.R` use relative paths and will work automatically after cloning. The only paths you need to update are the three data file paths near the top of `global.R`:
+Most file paths in `global.R` use relative paths and will work automatically after cloning. The only path you need to update is `data_dir` near the top of `global.R`:
 
 ```r
-td2_path           <- "/path/to/your/data/td2_with_wval.RDS"
-region_path        <- "/path/to/your/data/saveRegionalAggregatesRPHO/"
-report_metrics_path <- "/path/to/your/data/saveReportMetricsRPHO/"
+data_dir <- "/path/to/your/data/"
 ```
 
-Replace `/path/to/your/data/` with the actual folder on your machine where you have stored the data files.
+Replace `/path/to/your/data/` with the actual folder on your machine where you have stored the data files. The remaining data paths are built automatically from `data_dir` using `paste0()`.
 
-### 4. Run the app
+### 5. Run the app
 
 Once the environment is set up, packages are downloaded, and file paths are updated:
 
@@ -141,12 +140,12 @@ Once the environment is set up, packages are downloaded, and file paths are upda
 
 ---
 
-### :pushpin: Notes
+### Notes
 
 - The `shape_file/` folder includes regional and county boundary shapefiles used for the Region map polygons. Sewershed polygon boundaries are **not included** — the Sewershed map instead uses `CA_all_sewersheds_centroids.csv` to place an approximate icon for each sewershed.
 - `renv.lock` pins R package versions only, not the system C++ libraries that `sf` wraps (GEOS, GDAL, PROJ). Check system-library versions with `sf::sf_extSoftVersion()`.
 - The app aims for ADA Section 508 compliance: `tags$html(lang="en")` at the page root, keyboard handlers (`onkeydown`) on clickable non-button elements, `tabindex="0"` on info boxes and legend entries, and a JavaScript post-processor injected into every Plotly chart via `htmlwidgets::onRender()` so that range-selector buttons and legend items are focusable and keyboard-activatable.
 
-## Contact
+### Contact
 
 Questions about the data or adaptation of this codebase can be directed to the Cal-SuWers team at [Wastewatersurveillance@cdph.ca.gov](mailto:Wastewatersurveillance@cdph.ca.gov).
