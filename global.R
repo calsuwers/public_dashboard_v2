@@ -203,9 +203,9 @@ dash_update_data <-
   arrange(desc(date))
 
 data_dir            <- "/path/to/your/data/"
-td2_path            <- paste0(data_dir, "td2_with_wval.RDS")
-region_path         <- paste0(data_dir, "saveRegionalAggregatesRPHO/")
-report_metrics_path <- paste0(data_dir, "saveReportMetricsRPHO/")
+td2_path            <- paste0(data_dir, "data/td2_with_wval.RDS")
+region_path         <- paste0(data_dir, "data/saveRegionalAggregatesRPHO/")
+report_metrics_path <- paste0(data_dir, "data/saveReportMetricsRPHO/")
 
 # =============================================================================
 # 6. DATA LOADING ----
