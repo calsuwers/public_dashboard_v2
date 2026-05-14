@@ -41,7 +41,6 @@ The dashboard supports the following pathogens:
 ├── global.R                           # Loads packages and data, defines global objects
 ├── server.R                           # Server logic (reactives, plots, maps, tables)
 ├── ui.R                               # User interface layout (dashboardPage)
-├── slim_td2.R                         # One-off utility: slims td2_with_wval.RDS to required columns
 ├── dashboard_v2.Rproj                 # RStudio project file
 ├── .Rprofile                          # Automatically activates the renv environment upon opening
 ├── renv.lock                          # Pinned package versions for renv
@@ -59,7 +58,7 @@ The dashboard supports the following pathogens:
 │                                                   # (placeholder level values — see note above)
 │
 ├── shape_file/
-│   ├── CA_all_sewersheds.* # Sewershed polygon boundaries
+│   ├── CA_all_sewersheds.* # Sewershed approximate location 
 │   ├── saveCA_RPHOCounties.* # County boundaries
 │   └── saveCA_RPHORegions.* # RPHO region boundaries
 │
