@@ -212,7 +212,7 @@ report_metrics_path <- paste0(data_dir, "data/saveReportMetricsRPHO/")
 # Reads RDS and CSV files from the paths defined above.
 # - td2      : Site-level raw wastewater time series (all pathogens)
 # - shape_df : Sewershed polygon shapefile (centroid lng/lat computed here)
-# - ca_regions / ca_counties: RPHO region and county shapefiles
+# - ca_regions: RPHO region shapefiles
 # - d1, d2  : COVID (SARS-CoV-2) regional aggregates and site metrics
 # - f1, f2  : Flu A/B, RSV regional aggregates and site metrics
 # =============================================================================
@@ -245,16 +245,6 @@ ca_regions <- st_read("shape_file/saveCA_RPHORegions.shp")  %>%
          lat = st_coordinates(center)[,2]
   ) %>%
   st_transform(crs = 4326) %>%
-  st_zm() 
-
-ca_counties <- st_read("shape_file/saveCA_RPHOCounties.shp")  %>%
-  recode_rpho_region(.new_col = "region", .ref_col = "rph_rgn") %>% 
-  select(-rph_rgn) %>% 
-  st_transform(crs = 4326) %>%
-  mutate(center = st_centroid(geometry)) %>% 
-  mutate(lng = st_coordinates(center)[,1],
-         lat = st_coordinates(center)[,2]
-  ) %>%
   st_zm() 
 
 region_table = td2 %>% select(region, Label_Name) %>% distinct() %>% rename_region()

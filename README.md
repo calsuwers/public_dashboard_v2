@@ -59,7 +59,6 @@ The dashboard supports the following pathogens:
 │
 ├── shape_file/
 │   ├── CA_all_sewersheds.* # Sewershed approximate location 
-│   ├── saveCA_RPHOCounties.* # County boundaries
 │   └── saveCA_RPHORegions.* # RPHO region boundaries
 │
 ├── dashboard_update/
@@ -141,7 +140,7 @@ Once the environment is set up, packages are downloaded, and file paths are upda
 
 ### Notes
 
-- The `shape_file/` folder includes regional and county boundary shapefiles used for the Region map polygons. Sewershed polygon boundaries are **not included** — the Sewershed map instead uses `CA_all_sewersheds_centroids.csv` to place an approximate icon for each sewershed.
+- The `shape_file/` folder includes regional boundary shapefiles used for the Region map polygons. Sewershed polygon boundaries are **not included** — the Sewershed map instead uses `CA_all_sewersheds_centroids.csv` to place an approximate icon for each sewershed.
 - `renv.lock` pins R package versions only, not the system C++ libraries that `sf` wraps (GEOS, GDAL, PROJ). Check system-library versions with `sf::sf_extSoftVersion()`.
 - The app aims for ADA Section 508 compliance: `tags$html(lang="en")` at the page root, keyboard handlers (`onkeydown`) on clickable non-button elements, `tabindex="0"` on info boxes and legend entries, and a JavaScript post-processor injected into every Plotly chart via `htmlwidgets::onRender()` so that range-selector buttons and legend items are focusable and keyboard-activatable.
 
