@@ -52,10 +52,10 @@ The dashboard supports the following pathogens:
 ├── data/
 │   ├── td2_with_wval.RDS              # Site-level raw wastewater time series (all pathogens)
 │   ├── saveRegionalAggregatesRPHO/
-│   │   └── saveRegionalAggregates_wval_rpho.csv   # Regional-level aggregate metrics
+│   │   └── saveRegionalAggregates_wval_rpho.csv   # State and regional WVAL data
 │   └── saveReportMetricsRPHO/
-│       └── saveReportMetrics.csv                   # Sewershed-level report metrics
-│                                                   # (placeholder level values — see note above)
+│       └── saveReportMetrics.csv                   # State, region, and sewershed metrics
+│                                                   # (sewershed level metrics are placeholders — see note above)
 │
 ├── shape_file/
 │   ├── CA_all_sewersheds.* # Sewershed approximate location 
